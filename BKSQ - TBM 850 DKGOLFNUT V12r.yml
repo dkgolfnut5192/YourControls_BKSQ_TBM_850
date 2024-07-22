@@ -1,0 +1,748 @@
+# Version 0.7
+
+include:
+  - definitions/modules/Instruments/AS_GNS430.yaml
+  - definitions/modules/Instruments/AS_GNS530.yaml
+  - definitions/modules/Instruments/AS_GTX330.yaml
+  - definitions/modules/Instruments/AS_KR87.yaml 
+  - definitions/modules/Instruments/AS_KAP140.yaml
+  - definitions/modules/Instruments/PMS50_GNS.yaml
+  - definitions/modules/Instruments/PMS50_GTN.yaml
+  - definitions/modules/Instruments/TDS_GTNXi.yaml
+  - definitions/modules/autopilot.yaml
+  - definitions/modules/controls.yaml
+  - definitions/modules/deice.yaml
+  - definitions/modules/engines.yaml
+  - definitions/modules/fuel.yaml
+  - definitions/modules/general.yaml
+  - definitions/modules/handling.yaml
+  - definitions/modules/lights.yaml
+  - definitions/modules/navigation.yaml
+  - definitions/modules/pressurization.yaml
+  - definitions/modules/radios.yaml
+  - definitions/modules/safety.yaml
+  - definitions/modules/transponder.yaml
+  - definitions/modules/trim.yaml
+
+
+
+SHARED: 
+
+  - # LVAR's
+#   type: var
+#   var_name: L:
+#  - #############  Breakers  #############
+    type: var
+    var_name: L:var_EssentialBusTieCover
+  - #
+    type: var
+    var_name: L:var_EssentialBusTieSwitch
+  - # LAnding Light Switch Right
+    type: NumSet
+    var_name: A:LIGHT LANDING:2
+    var_units: Bool
+    var_type: f64
+    event_name: LANDING_LIGHTS_SET
+    event_param: 2
+  -
+    type: ToggleSwitch
+    var_name: A:LIGHT LANDING:2
+    var_units: Bool
+    var_type: bool
+    event_name: LANDING_LIGHTS_TOGGLE
+    event_param: 2
+    
+  - # BREAKER FOR GEAR MOTOR
+    type: ToggleSwitch
+    var_name: A:CIRCUIT CONNECTION ON:3
+    var_units: Bool
+    var_type: bool
+    event_name: ELECTRICAL_CIRCUIT_TOGGLE
+    event_param: 3 
+#  -    get: 5 (>A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:3, Bool)
+
+#  - #############  AUTOPILOT ADDITIONAL NOT CAPTURED IN definitions/modules/autopilot #############
+  - # Master AP Switch
+    type: ToggleSwitch
+    var_name: A:AUTOPILOT MASTER
+    var_units: Bool
+    var_type: f64
+    event_name: AP_MASTER
+    cancel_h_events: true
+    use_calculator: true
+  - #
+    type: var
+    var_name: L:AP_SPD_VAR_DEC
+  - #
+    type: var
+    var_name: L:AP_SPD_VAR_INC
+  - #
+    type: var
+    var_name: L:var_autopilotSoftRideMode   
+  - #
+    type: var
+    var_name: L:AP_MAX_BANK_SET
+  - #
+    type: var
+    var_name: L:var_AutopilotStartupCounter
+  
+#  - #############  CENTER CONSOLE FLOOR & LOWER PANEL #############
+  - #
+    type: var
+    var_name: L:var_EmergencyGearDoor
+  - #
+    type: var
+    var_name: L:var_EmergencyGearHandle
+  - #
+    type: var
+    var_name: L:RECIP ENG FUEL TANK SELECTOR:1
+  - #
+    type: var
+    var_name: L:AILERON TRIM PCT
+  - #
+    type: var
+    var_name: L:ELEVATOR TRIM PCT 
+  - #
+    type: var
+    var_name: L:RUDDER TRIM PCT
+  - #
+    type: var
+    var_name: L:BKSQ_ConditionLever
+
+
+
+#  - #############  CENTER CONSOLE UPPER  #############
+  - # PA PUBLIC ANNOUNCE SWITCH
+    type: var
+    var_name: L:var_cabinIntercom
+  - # ANNUNCIATOR TEST
+    type: var
+    var_name: L:var_AudioTestButton
+  - #
+    type: var
+    var_name: L:MARKER BEACON SENSITIVITY HIGH
+  - # Annunciator Test 1
+    type: var
+    var_name: L:var_AnnunciatorTest1
+  - # Annunciator Test 1
+    type: var
+    var_name: L:var_AnnunciatorTest2
+  - # ANNUNCIATOR DIMMER KNOB
+    type: var
+    var_name: L:var_AnnunciatorDim
+    unreliable: true
+#  - # BENDIX RDR1150XL  
+  - # 
+    type: var
+    var_name: L:var_RadarGain
+  - #
+    type: var
+    var_name: L:var_RadarBrightness
+#  - # removed to add var_radarMode below
+#    type: var
+#    var_name: L:var_RadarModeSelector
+#    unreliable: true
+  - #
+    type: var
+    var_name: L:var_radarMode
+  - #
+    type: var
+    var_name: L:var_RadarTilt
+#  # LOWER SWITCH AREA
+  - # AP/TRIMS MASTER SWITCH
+    type: var
+    var_name: L:BKSQ_AutopilotMasterSwitch
+
+  - # RADIO MASTER SWITCH
+    type: var
+    var_name: L:var_RadioMasterSwitch
+  - # INSTRUMENT BACK LIGHT DIMMER KNOB
+    type: var
+    var_name: L:var_InstrumentLightingKnob
+    unreliable: true
+  - # MAIN PANEL DIMMER KNOB
+    type: var
+    var_name: L:var_PanelLightingKnob
+    unreliable: true
+
+
+#  - #############  COPILOT PANEL LOWER  #############
+#  - # BKSQ COM 1 & COM 2 switch panel 
+  - # COM 1 switch 750>530>KX155
+    type: var
+    var_name: L:var_radio1Mode
+  - # COM 2 switch 530>KX155
+    type: var
+    var_name: L:var_radio2Mode
+
+#  - # ENVIRNMENTAL CONTROL SYSTEM 
+  - #
+    type: var
+    var_name: L:var_pressurizationGoal
+    unreliable: true
+  - #
+    type: var
+    var_name: L:var_pressurizationClimbRate
+    unreliable: true
+  - # BLEED SWITCH
+    type: var
+    var_name: L:var_bleedState
+  - # ECS LIGHT TEST SWITCH
+    type: var
+    var_name: L:var_EnvironmentalLightTestButton
+  - # ECS FAULT LIGHT
+    type: var
+    var_name: L:var_ecsFault    
+  - #
+    type: var
+    var_name: L:var_CabinTemperatureKnob
+    unreliable: true
+  - #
+    type: var
+    var_name: L:var_airconState
+  - #
+    type: var
+    var_name: L:var_FanSwitch
+  - #
+    type: var
+    var_name: L:var_AirFlowSelectorKnob
+  - #
+    type: var
+    var_name: L:var_PressurizationDumpCover
+  - #
+    type: var
+    var_name: L:var_PressurizationDump
+#  - # MISCELLANEOUS LOWER PANEL
+  - # ALTERNATE AIR LEVER
+    type: var
+    var_name: L:XMLVAR_Cabin_Air_2_Position
+  - # CABIN TEMPERATURE DISPLAY F/C BUTTON
+    type: var
+    var_name: L:var_CabinTemperatureUnitMode
+  - # COPILOT DME MODE SELECTOR
+    type: var
+    var_name: L:var_dmeMode   
+  - # CREW MUSIC SOURCE SWITCH
+    type: var
+    var_name: L:var_CrewMusicSwitch    
+   
+#  - #############  COPILOT PANEL UPPER  #############
+  - # FUEL SELECT SWITCH
+    type: var
+    var_name: L:var_AutoFuelSelectorSwitch
+  - # FUEL SELECT SWITCH
+    type: ToggleSwitch
+    var_name: A:CIRCUIT SWITCH ON:40    
+    var_units: Bool
+    var_type: bool
+    event_name: FUEL_SELECTOR_CIRCUIT
+    event_param: 40      
+   
+  - # AUX FUEL BP SWITCH
+    type: var
+    var_name: L:BKSQ_fuelPumpSwitch
+  - # ELT SELECTOR SWITCH
+    type: var
+    var_name: L:XMLVAR_ELT_STATE
+  - # GYRO SLAVE/FREE SWITCH WORKS BOTH PILOT AND COPILOT
+    type: var
+    var_name: L:var_GyroSlaveModeSwitch
+  - #
+    type: var
+    var_name: L:var_copilotDecisionHeight
+  - #
+    type: var
+    var_name: L:var_radarAltimeterTest
+
+#  - #############  MISCELLENEOUS INTERIOR #############
+  - # PILOT DOOR UNLOCK
+    type: var
+    var_name: L:var_pilotDoorLockedLatching
+  - # AFT DOOR FAILURE TO PRESSURIZE
+    type: var
+    var_name: L:var_pilotDoorLockedLatchingFailure
+  - # PILOT DOOR LADDER RAISE and LOWER
+    type: var
+    var_name: L:var_PilotLadder
+  - # AFT DOOR Operation
+    type: var
+    var_name: L:var_aftDoorLockedLatching
+  - # AFT DOOR FAILURE TO PRESSURIZE
+    type: var
+    var_name: L:var_aftDoorLockedLatchingFailure
+  - # AFT DOOR LADDER RAISE and LOWER
+    type: var
+    var_name: L:var_AftLadder
+#  - # EMERGENCY DOOR - NOT MODELED
+#    type: var
+#    var_name: L:
+  - # PILOT DOOR READING LIGHT
+    type: var
+    var_name: L:var_ReadingLightSwitch_L
+  - # COPILOT DOOR READING LIGHT
+    type: var
+    var_name: L:var_ReadingLightSwitch_R
+  - #
+    type: var
+    var_name: L:var_Visor_L
+  - #
+    type: var
+    var_name: L:var_Visor_R
+  - #
+    type: var
+    var_name: L:var_Armrest_L
+  - #
+    type: var
+    var_name: L:var_Armrest_R
+    
+#  - #############  PILOT PANEL LEFT  #############
+#  - # DEICE SYSTEM
+  - # 
+    type: var
+    var_name: L:var_airframeDeice
+  - # ICE LIGHT WING
+    type: var
+    var_name: L:LIGHTING_WING1
+  - # 
+    type: var
+    var_name: L:PROP DEICE SWITCH:1
+  - # LAnding Light Switch Right
+    type: NumSet
+    var_name: A:PROP DEICE SWITCH:1
+    var_units: Bool
+    var_type: f64
+    event_name: DEICE_Propellor_1
+    event_param: 1
+  - #
+    type: var
+    var_name: L:DEICE_Propeller_1
+  - #
+    type: var
+    var_name: L:var_windshieldHeatSwitch_L
+  - #
+    type: var
+    var_name: L:var_windshieldHeatSwitch_R   
+  - #
+    type: var
+    var_name: L:DEICE_Pitot_1
+  - #
+    type: var
+    var_name: L:DEICE_Pitot_2
+  - #
+    type: var
+    var_name: L:var_InertialSeparatorSwitch
+  - #
+    type: var
+    var_name: L:var_SwitchesLightTest
+#  - # MISCELLANEOUS ITEMS PILOT LEFT
+  - # CHRONOMETER MODE BUTTON
+    type: var
+    var_name: L:var_yokeChronoMode_L
+  - # CHRONOMETER DATE BUTTON
+    type: var
+    var_name: L:var_ChronoDateTimer
+  - # CHRONOMETER TIMER BUTTON
+    type: var
+    var_name: L:var_yokeTimerMode_L
+  - # NAV 1 OBS KNOB
+    type: var
+    var_name: L:NAV OBS:1
+  - # NAV 2 OBS KNOB
+    type: var
+    var_name: L:NAV OBS:2
+  - # GYRO FREE/SLAVE SWITCH
+    type: var
+    var_name: L:var_GyroSlaveModeSwitch
+  - # MASTER CAUTION INDICATOR BUTTON
+    type: var
+    var_name: L:var_masterCautionLatching
+  - # MASTER WARNING INDICATOR BUTTON
+    type: var
+    var_name: L:var_masterWarningLatching
+   
+#  - #############  PILOT PANEL MIDDLE  #############
+#  - # EFIS CONTROLS UNIT
+  - # 
+    type: var
+    var_name: L:var_EFIS_PowerSwitch
+    unreliable: true
+  - #
+    type: var
+    var_name: L:DECISION HEIGHT
+  - #
+    type: var
+    var_name: L:var_efisDecisionHeightTest
+  - #
+    type: var
+    var_name: L:var_EfisDecisionHeight
+  - #
+    type: var
+    var_name: L:var_EfisDecisionHeightSet
+  - #
+    type: var
+    var_name: L:var_EfisCompositeMode
+  - #
+    type: var
+    var_name: L:var_EADI_Brightness
+  - #
+    type: var
+    var_name: L:var_efisDmeMode
+  - #
+    type: var
+    var_name: L:var_EfisSource
+  - #
+    type: var
+    var_name: L:EFIS_NavigationSource
+  - #
+    type: var
+    var_name: L:AUTOPILOT_HeadingBug
+  - #
+    type: var
+    var_name: L:AUTOPILOT_Heading
+  - #
+    type: var
+    var_name: L:var_MaskMicSwitch   
+  - #
+    type: var
+    var_name: L:var_MaskMicCover  
+  - #
+    type: var
+    var_name: L:PARKING BRAKE POSITION
+    
+#  - #############  PILOT PANEL RIGHT  #############
+  - # VS Adjust MODE
+    type: var
+    var_name: L:var_VsAdjustMode
+  - # GPS 1 MESSAGE LIGHT
+    type: var
+    var_name: L:var_gpsMessageButton1Latching
+  - # GPS 1 MESSAGE LIGHT
+    type: var
+    var_name: L:var_gpsMessageButton2Latching
+#  - #
+#    type: var
+#    var_name: L:KOHLSMAN SETTING HG    
+  - #
+    type: var
+    var_name: L:var_TurbineTempTestButton
+  - #
+    type: var
+    var_name: L:var_TurbineTempTestButton_IsDown    
+  - #
+    type: var
+    var_name: L:var_TerrainTest
+  - #
+    type: var
+    var_name: L:var_TerrainInhibited
+  - # ANNUNCIATOR TEST BUTTON
+    type: var
+    var_name: L:var_PanelLightTestButton
+  - # STORM SCOPE SWITCH
+    type: var
+    var_name: L:var_stormScopeSwitch
+  - # EFIS AHRS SOURCE SWITCH
+    type: var
+    var_name: L:var_efisSource
+  - # LANDING GEAR DOWN TEST
+    type: var
+    var_name: L:var_landingGearDownCheck
+  - # LANDING GEAR LIGHT TEST 1&2
+    type: var
+    var_name: L:var_landingGearLightTestIlluminate
+  - # LANDING GEAR SWITCH POSITION
+    type: var
+    var_name: L:LANDING_GEAR_gear
+  - # LANDING GEAR LEVER
+    type: var
+    var_name: L:LANDING_GEAR_Lever_gear
+#  - # ENGINE TREND MONITOR
+  - #
+    type: var
+    var_name: L:Etm_EnterTest
+  - #
+    type: var
+    var_name: L:XMLVAR_Etm_IncDec_Animation_Position
+  - #
+    type: var
+    var_name: L:Etm_Record
+  - #
+    type: var
+    var_name: L:Etm_ClockStart
+  - #
+    type: var
+    var_name: L:Etm_ClockStop
+  - #
+    type: var
+    var_name: L:Etm_ClockReset
+  - #
+    type: var
+    var_name: L:Etm_PageUp
+  - #
+    type: var
+    var_name: L:Etm_PageUp
+  - #
+    type: var
+    var_name: L:var_EtmMode
+    
+#  - #############  OVERHEAD SWITCH PANEL  #############
+# - # LANDING LIGHT SWITCH LEFT/RIGHT 
+#  -######## all Light switches are Defined in LIGHTS definition and Right Landing is added to Shared above #######
+  - # GYRO SWITCH
+    type: var
+    var_name: A:CIRCUIT SWITCH ON:57
+    var_units: Bool
+  - # RMI
+    type: var
+    var_name: A:CIRCUIT SWITCH ON:58
+    var_units: Bool
+  - # ADI 2
+    type: var
+    var_name: A:CIRCUIT SWITCH ON:59
+    var_units: Bool    
+  - # HSI 2
+    type: var
+    var_name: A:CIRCUIT SWITCH ON:60
+    var_units: Bool    
+    
+#  - # ELECTRICAL POWER PANEL
+  - # CRASHBAR
+    type: var
+    var_name: L:var_crashbar
+  - #
+    type: var
+    var_name: L:var_MainGeneratorResetButton
+  - #
+    type: var
+    var_name: L:var_StandbyGeneratorResetButton
+  - #
+    type: var
+    var_name: L:BKSQ_SourceSwitch
+  - #
+    type: var
+    var_name: L:BKSQ_GeneratorSwitch
+#  - # ENGINE START AREA
+  - #
+    type: var
+    var_name: L:BKSQ_StarterSwitch
+  - #
+    type: var
+    var_name: L:BKSQ_IgnitionSwitch
+#  - # OXYGEN SWITCHES
+  - # PILOT OXYGEN
+    type: var
+    var_name: L:var_oxygenMaster
+  - # 
+    type: var
+    var_name: L:var_passengerOxygen
+    
+#  - #############  OVERHEAD MIDDLE  & REAR PANEL WOOD GRAIN #############
+  - # PANEL EMERGENCY DIMMER SWITCH
+    type: var
+    var_name: L:var_EmergencyLightsKnob
+  - #
+    type: var
+    var_name: L:var_HornTest
+  - #
+    type: var
+    var_name: L:var_AccessLights_Button
+  - #
+    type: var
+    var_name: L:var_CabinLights_Middle_L_Button
+  - #
+    type: var
+    var_name: L:var_CabinLights_Middle_R_Button
+  - #
+    type: var
+    var_name: L:var_CabinLights_Aft_L_Button
+  - #
+    type: var
+    var_name: L:var_CabinLights_Aft_R_Button
+#  - # OVERHEAD OXYGEN MASKS
+  - # PILOT MASK side
+    type: var
+    var_name: L:var_coPilotOxygen
+  - # COPILOT MASK side
+    type: var
+    var_name: L:var_pilotOxygen
+
+server:
+  -
+    type: var
+    var_name: A:FUEL TANK LEFT MAIN LEVEL
+    var_units: Percent
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:FUEL TANK RIGHT MAIN LEVEL
+    var_units: Percent
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:1
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:2
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:3
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:4
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:5
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:6
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:7
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:8
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:9
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:10
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:11
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:12
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:13
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:14
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+  -
+    type: var
+    var_name: A:PAYLOAD STATION WEIGHT:15
+    var_units: Pounds
+    var_type: f64
+    unreliable: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
